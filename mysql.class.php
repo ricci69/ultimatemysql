@@ -16,6 +16,11 @@
  *   Michael Ansaldi
  *   Ryan Tse
  */
+
+define('MYSQL_BOTH',MYSQLI_BOTH);
+define('MYSQL_NUM',MYSQLI_NUM);
+define('MYSQL_ASSOC',MYSQLI_ASSOC);
+
 class MySQL
 {
 	// SET THESE VALUES TO MATCH YOUR DATA CONNECTION
