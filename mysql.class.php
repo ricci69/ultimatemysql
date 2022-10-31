@@ -1107,7 +1107,14 @@ class MySQL
 	public function Query($sql) {
 		$this->ResetError();
 		$this->last_sql = $sql;
-		$this->last_result = @mysqli_query($this->mysql_link, $sql);
+		
+		try {
+            $this->last_result = @mysqli_query($this->mysql_link, $sql);
+		} catch (mysqli_sql_exception $e) {
+            $this->SetError($e->getMessage(), $e->getCode());
+            return false;
+        }
+
 		if(! $this->last_result) {
 			$this->active_row = -1;
 			$this->SetError();
