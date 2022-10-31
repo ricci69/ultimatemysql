@@ -1270,7 +1270,7 @@ class MySQL
 	 */
 	public function Release() {
 		$this->ResetError();
-		if (! $this->last_result) {
+		if (!is_object($this->last_result)) {
 			$success = true;
 		} else {
 			$success = @mysqli_free_result($this->last_result);
