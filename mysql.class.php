@@ -469,12 +469,16 @@ class MySQL
 
 	/**
 	 * Returns the comments for fields in a table into an
-	 * array or NULL if the table has not got any fields
+	 * array or returns FALSE on error
 	 *
 	 * @param string $table Table name
+	 * @param string $resultType (Optional) The type of array result. Can be: NUM, ASSOC, BOTH
 	 * @return array An array that contains the column comments
 	 */
-	public function GetColumnComments($table) {
+	public function GetColumnComments($table, $resultType="ASSOC") {
+        if (!in_array($resultType, array("ASSOC","NUM","BOTH")))
+            return false;
+        
 		$this->ResetError();
 		$records = mysqli_query($this->mysql_link, "SHOW FULL COLUMNS FROM " . $table);
 		if (! $records) {
@@ -489,8 +493,11 @@ class MySQL
 				$index = 0;
 				// Fetchs the array to be returned (column 8 is field comment):
 				while ($array_data = mysqli_fetch_array($records)) {
-					$columns[$index] = $array_data[8];
-					$columns[$columnNames[$index++]] = $array_data[8];
+                    if ($resultType=="NUM" || $resultType=="BOTH") 
+                        $columns[$index] = $array_data[8];
+                    if ($resultType=="ASSOC" || $resultType=="BOTH")     
+                        $columns[$columnNames[$index]] = $array_data[8];
+                    $index++;
 				}
 				return $columns;
 			}
@@ -515,12 +522,8 @@ class MySQL
 				$this->SetError();
 				$result = false;
 			} else {
-				$result = mysqli_field_count($this->mysql_link);
-				$success = @mysqli_free_result($records);
-				if (! $success) {
-					$this->SetError();
-					$result = false;
-				}
+				$result = mysqli_field_count($this->mysql_link); 
+				mysqli_free_result($records);
 			}
 		}
 		return $result;

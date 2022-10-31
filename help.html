@@ -1091,7 +1091,7 @@ GetBooleanValue
 <span class="method-title">GetColumnComments</span>
 </div>
 <!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Returns the comments for fields in a table into an array or NULL if the table has not got any fields</p>
+<p class="short-description">Returns the comments for fields in a table into an array or returns FALSE on error</p>
 <ul class="tags">
 <li><span class="field">return:</span> An array that contains the column comments</li>
 <li><span class="field">access:</span> public</li>
@@ -1101,12 +1101,15 @@ GetBooleanValue
 <span class="method-name">
 GetColumnComments
 </span>
-(<span class="var-type">string</span>&nbsp;<span class="var-name">$table</span>)
+(<span class="var-type">string</span>&nbsp;<span class="var-name">$table</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$resultType</span> = <span class="var-default">""</span>])
 </div>
 <ul class="parameters">
 <li>
 <span class="var-type">string</span>
 <span class="var-name">$table</span><span class="var-description">: Table name</span> </li>
+<li>
+<span class="var-type">string</span>
+<span class="var-name">$resultType</span><span class="var-description">: (Optional) The type of array result. Can be: NUM, ASSOC, BOTH</span> </li>
 </ul>
 <p>Example:</p>
 <p><code><span style="font: 12pt Fixedsys;"><span class="php1-variable">$columns </span><span class="php1-symbol">=</span><span class="php1-space"> $db</span><span class="php1-symbol">-&gt;</span><span class="php1-identifier">GetColumnComments</span><span class="php1-symbol">(</span><span class="php1-string">&quot;MyTable&quot;</span><span class="php1-symbol">);<br />
