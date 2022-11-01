@@ -866,13 +866,15 @@ class MySQL
 	public function GetXML() {
 		// Create a new XML document
 		$doc = new DomDocument('1.0'); // ,'UTF-8');
-
+		$doc->preserveWhiteSpace = true;
+		$doc->formatOutput = true;
+		
 		// Create the root node
 		$root = $doc->createElement('root');
 		$root = $doc->appendChild($root);
 
 		// If there was a result set
-		if (is_resource($this->last_result)) {
+		if (is_object($this->last_result)) {
 
 			// Show the row count and query
 			$root->setAttribute('rows',
