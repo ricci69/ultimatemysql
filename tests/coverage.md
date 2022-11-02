@@ -57,20 +57,19 @@ user@pc:/var/www/html/ultimatemysql$ ./vendor/bin/phpunit --testdox tests
 - [x] integer GetColumnLength (string $column, [string $table = ""])
 - [x] integer GetColumnName (string $columnID, [string $table = ""])
 - [x] array GetColumnNames ([string $table = ""])
-
+- [x] array GetTables ()
 
 ***EXPORT***
-- [ ] string GetHTML ([boolean $showCount = true], [string $styleTable = null], [string $styleHeader = null], [string $styleData = null])
-- [ ] string GetJSON ()
-- [ ] array GetTables ()
-- [ ] boolean GetXML ()
+- [x] string GetHTML ([boolean $showCount = true], [string $styleTable = null], [string $styleHeader = null], [string $styleData = null])
+- [x] string GetJSON ()
+- [x] boolean GetXML ()
 
 
 ***TIMER***
-- [ ] Float TimerDuration ([integer $decimals = 4])
-- [ ] void TimerStart ()
-- [ ] void TimerStop ()
-- [ ] object PHP QueryTimed (string $sql)
+- [x] Float TimerDuration ([integer $decimals = 4])
+- [x] void TimerStart ()
+- [x] void TimerStop ()
+- [x] object PHP QueryTimed (string $sql)
 
 
 ***QUERY***
@@ -98,12 +97,11 @@ user@pc:/var/www/html/ultimatemysql$ ./vendor/bin/phpunit --testdox tests
 
 
 ***VALUES***
-- [ ] boolean GetBooleanValue (any $value)
-- [ ] boolean IsDate (date/string $value)
-- [ ] string SQLBooleanValue (any $value, any $trueValue, any $falseValue, [string $datatype = self::SQLVALUE_TEXT])
-- [ ] string SQLFix (string $value)
-- [ ] string SQLUnfix (string $value)
-- [ ] string SQLValue (any $value, [string $datatype = self::SQLVALUE_TEXT])
+- [x] boolean GetBooleanValue (any $value)
+- [x] boolean IsDate (date/string $value)
+- [x] string SQLBooleanValue (any $value, any $trueValue, any $falseValue, [string $datatype = self::SQLVALUE_TEXT])
+- [x] string SQLFix (string $value)
+- [x] string SQLValue (any $value, [string $datatype = self::SQLVALUE_TEXT])
 
 
 ***ERRORI***

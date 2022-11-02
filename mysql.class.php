@@ -990,12 +990,10 @@ class MySQL
 	 * @return boolean Returns TRUE if value is date or FALSE if not date
 	 */
 	static public function IsDate($value) {
-		$date = date('Y', strtotime($value));
-		if ($date == "1969" || $date == '') {
-			return false;
-		} else {
-			return true;
-		}
+        if (strtotime($value))
+            return true;
+        else
+            return false;
 	}
 
 	/**
@@ -1690,7 +1688,7 @@ class MySQL
 	 *
 	 */
 	public function TimerStart() {
-		$parts = explode(" ", microtime());
+		$parts = explode(" ", microtime()); 
 		$this->time_diff = 0;
 		$this->time_start = $parts[1].substr($parts[0],1);
 	}
@@ -1703,7 +1701,6 @@ class MySQL
 		$parts  = explode(" ", microtime());
 		$time_stop = $parts[1].substr($parts[0],1);
 		$this->time_diff  = ($time_stop - $this->time_start);
-		$this->time_start = 0;
 	}
 
 	/**

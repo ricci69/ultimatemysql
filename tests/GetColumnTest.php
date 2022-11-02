@@ -74,4 +74,13 @@ final class GetColumnTest extends TestCase
         $actual = $this->db->GetColumnNames("test_table");
         $this->assertEqualsCanonicalizing($expected, $actual);
     }    
+    
+    public function testGetTablesList()
+    {
+        $expected = "test_table";
+        $actual = $this->db->GetTables();
+        $this->assertContains($expected, $actual);
+    }    
+    
+    
 }
