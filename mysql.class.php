@@ -92,7 +92,7 @@ class MySQL
 	 *
 	 */
 	public function __destruct() {
-		$this->Close();
+            $this->Close();
 	}
 
 	/**
@@ -330,6 +330,11 @@ class MySQL
 	public function Close() {
 		$this->ResetError();
 		$this->active_row = -1;
+		
+		// Skip if not connected or already closed
+		if (!is_null($this->mysql_link))
+            return true;
+		
 		$success = $this->Release();
 		if ($success) {
 			$success = @mysqli_close($this->mysql_link);
