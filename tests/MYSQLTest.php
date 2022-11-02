@@ -1,8 +1,5 @@
 <?php
-//require_once __DIR__ . '/../mysql.class.php';
-
 use PHPUnit\Framework\TestCase;
-//https://phpunit.de/getting-started/phpunit-9.html
 
 final class MYSQLTest extends TestCase
 {
