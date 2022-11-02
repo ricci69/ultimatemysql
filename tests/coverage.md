@@ -1,6 +1,29 @@
 # Test cases coverage of all library functions
 
 ## How to use
+First of all you need to create the test database
+```sql
+CREATE TABLE `test_table` (
+  `id` int NOT NULL,
+  `name` varchar(25) NOT NULL COMMENT 'It contains the name',
+  `date` int NOT NULL,
+  `value` varchar(15) NOT NULL
+);
+
+INSERT INTO `test_table` (`id`, `name`, `date`, `value`) VALUES
+(1, 'John', 1667219298, 'val2');
+
+
+ALTER TABLE `test_table`
+  ADD PRIMARY KEY (`id`);
+
+
+ALTER TABLE `test_table`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+```
+
+after this, you can use PHPUnit
+
 ```console
 user@pc:/var/www/html/ultimatemysql$ composer update
 user@pc:/var/www/html/ultimatemysql$ ./vendor/bin/phpunit --testdox tests
