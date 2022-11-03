@@ -399,7 +399,7 @@ class MySQL
 	/**
 	 * Returns the last MySQL error as text
 	 *
-	 * @return string Error text from last known error
+	 * @return string Error text from last known error or FALSE if no errors happened
 	 */
 	public function Error() {
 		$error = $this->error_desc;
@@ -420,7 +420,7 @@ class MySQL
 	/**
 	 * Returns the last MySQL error as a number
 	 *
-	 * @return integer Error number from last known error
+	 * @return integer Error number from last known error or FALSE if no errors happened
 	 */
 	public function ErrorNumber() {
 		if (strlen($this->error_desc) > 0)
@@ -429,10 +429,10 @@ class MySQL
 			{
 				return $this->error_number;
 			} else {
-				return -1;
+				return false;
 			}
 		} else {
-			return $this->error_number;
+			return false;
 		}
 	}
 

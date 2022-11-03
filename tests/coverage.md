@@ -44,7 +44,7 @@ user@pc:/var/www/html/ultimatemysql$ ./vendor/bin/phpunit --testdox tests
 ```
 
 ## Groups of functions
-**Actual coverage: 44/65** ![28%](https://progress-bar.dev/68)
+**Actual coverage: 49/65** ![28%](https://progress-bar.dev/75)
   
 ***MYSQL***
 - [x] MySQL __construct ([boolean $connect = true], [string $database = ""], [string $server = ""], [string $username = ""], [string $password = ""], [string $charset = ""])
@@ -87,11 +87,11 @@ user@pc:/var/www/html/ultimatemysql$ ./vendor/bin/phpunit --testdox tests
 
 
 ***QUERY***
-- [ ] object PHP Query (string $sql)
-- [ ] array QueryArray (string $sql, [integer $resultType = MYSQL_BOTH])
-- [ ] object PHP QuerySingleRow (string $sql)
-- [ ] array QuerySingleRowArray (string $sql, [integer $resultType = MYSQL_BOTH])
-- [ ] mixed QuerySingleValue (string $sql)
+- [x] object PHP Query (string $sql)
+- [x] array QueryArray (string $sql, [integer $resultType = MYSQL_BOTH])
+- [x] object PHP QuerySingleRow (string $sql)
+- [x] array QuerySingleRowArray (string $sql, [integer $resultType = MYSQL_BOTH])
+- [x] mixed QuerySingleValue (string $sql)
 - [ ] boolean AutoInsertUpdate (string $tableName, array $valuesArray, array $whereArray)
 - [ ] integer InsertRow (string $tableName, array $valuesArray)
 - [ ] boolean UpdateRows (string $tableName, array $valuesArray, [array $whereArray = null]) 

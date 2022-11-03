@@ -22,19 +22,30 @@ final class ErrorsTest extends TestCase
         $actual = $this->db->Error();
 
         $this->assertStringContainsString($expected, $actual);
+
+        # 3
+        $this->db->Query("SELECT * FROM `test_table`");
+        $actual = $this->db->Error();
+
+        $this->assertFalse($actual);
     }    
     
     public function testGetErrorNumber()
     {
         # 1
-        $expected = 0;
         $actual = $this->db->ErrorNumber();
-        $this->assertSame($expected, $actual);
+        $this->assertFalse($actual);
 
         # 2
-        $this->db->Query("SELECT * FROM NonExistentTable");
+        $this->db->Query("SELECT * FROM `NonExistentTable`");
         $actual = $this->db->ErrorNumber();
 
         $this->assertIsNumeric($actual);
+
+        # 3
+        $this->db->Query("SELECT * FROM `test_table`");
+        $actual = $this->db->ErrorNumber();
+
+        $this->assertFalse($actual);
     }
 }
