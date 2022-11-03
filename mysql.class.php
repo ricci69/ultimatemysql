@@ -132,7 +132,7 @@ class MySQL
 	public function BeginningOfSeek() {
 		$this->ResetError();
 		if ($this->IsConnected()) {
-			if ($this->active_row < 1) {
+			if ($this->active_row === 0) {
 				return true;
 			} else {
 				return false;
@@ -385,7 +385,7 @@ class MySQL
 	public function EndOfSeek() {
 		$this->ResetError();
 		if ($this->IsConnected()) {
-			if ($this->active_row >= ($this->RowCount())) {
+			if ($this->active_row >= ($this->RowCount()-1)) {
 				return true;
 			} else {
 				return false;
@@ -1417,6 +1417,7 @@ class MySQL
 			return false;
 		} elseif ($row_number >= $row_count) {
 			$this->SetError("Seek parameter is greater than the total number of rows", -1);
+			$this->active_row = -1;
 			return false;
 		} else {
 			$this->active_row = $row_number;
@@ -1767,12 +1768,17 @@ class MySQL
 			$this->SetError("No connection");
 			return false;
 		} else {
-			if(! mysqli_query($this->mysql_link, "ROLLBACK")) {
-				$this->SetError("Could not rollback transaction");
-				return false;
+			if ($this->in_transaction) {
+				if(! mysqli_query($this->mysql_link, "ROLLBACK")) {
+					$this->SetError("Could not rollback transaction");
+					return false;
+				} else {
+					$this->in_transaction = false;
+					return true;
+				}
 			} else {
-				$this->in_transaction = false;
-				return true;
+				$this->SetError("Not in a transaction", -1);
+				return false;
 			}
 		}
 	}

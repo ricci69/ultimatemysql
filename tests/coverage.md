@@ -3,23 +3,37 @@
 ## How to use
 First of all you need to create the test database
 ```sql
+DROP DATABASE IF EXISTS `testdb`;
+CREATE DATABASE IF NOT EXISTS `testdb`;
+USE `testdb`;
+
+CREATE TABLE `test_query` (
+  `id` int NOT NULL,
+  `key` varchar(25) NOT NULL,
+  `value` varchar(50) NOT NULL
+);
+
 CREATE TABLE `test_table` (
   `id` int NOT NULL,
   `name` varchar(25) NOT NULL COMMENT 'It contains the name',
-  `date` int NOT NULL,
+  `date` date NOT NULL,
   `value` varchar(15) NOT NULL
 );
 
-INSERT INTO `test_table` (`id`, `name`, `date`, `value`) VALUES
-(1, 'John', 1667219298, 'val2');
+INSERT INTO `test_table` (`id`, `name`, `date`, `value`) VALUES (1, 'John', '2022-01-01', 'Red');
+INSERT INTO `test_table` (`id`, `name`, `date`, `value`) VALUES (2, 'John2', '2022-06-01', 'Yellow');
 
+ALTER TABLE `test_query`
+  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `test_table`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `test_query`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `test_table`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 ```
 
 after this, you can use PHPUnit
@@ -30,7 +44,7 @@ user@pc:/var/www/html/ultimatemysql$ ./vendor/bin/phpunit --testdox tests
 ```
 
 ## Groups of functions
-**Actual coverage: 18/65** ![28%](https://progress-bar.dev/28)
+**Actual coverage: 44/65** ![28%](https://progress-bar.dev/68)
   
 ***MYSQL***
 - [x] MySQL __construct ([boolean $connect = true], [string $database = ""], [string $server = ""], [string $username = ""], [string $password = ""], [string $charset = ""])
@@ -104,20 +118,19 @@ user@pc:/var/www/html/ultimatemysql$ ./vendor/bin/phpunit --testdox tests
 - [x] string SQLValue (any $value, [string $datatype = self::SQLVALUE_TEXT])
 
 
-***ERRORI***
-- [ ] string Error ()
-- [ ] integer ErrorNumber ()
-- [ ] void Kill ([mixed $message = ''])
+***ERRORS***
+- [x] string Error ()
+- [x] integer ErrorNumber ()
 
 ***SEEK***
-- [ ] boolean MoveFirst ()
-- [ ] boolean MoveLast ()
-- [ ] boolean BeginningOfSeek ()
-- [ ] boolean EndOfSeek ()
-- [ ] object Fetched Seek (integer $row_number)
-- [ ] integer SeekPosition ()
+- [x] boolean MoveFirst ()
+- [x] boolean MoveLast ()
+- [x] boolean BeginningOfSeek ()
+- [x] boolean EndOfSeek ()
+- [x] object Fetched Seek (integer $row_number)
+- [x] integer SeekPosition ()
 
-***TRANSACTION***
-- [ ] boolean TransactionBegin ()
-- [ ] boolean TransactionEnd ()
-- [ ] boolean TransactionRollback ()
+***TRANSACTIONS***
+- [x] boolean TransactionBegin ()
+- [x] boolean TransactionEnd ()
+- [x] boolean TransactionRollback ()
