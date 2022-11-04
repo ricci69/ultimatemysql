@@ -182,6 +182,36 @@ final class QueryTest extends TestCase
         $this->assertFalse($actual);
     }    
     
+    public function testSelectRows()
+    {
+        # 1
+        $actual = $this->db->SelectRows("test_query", array("key"=>MySQL::SQLValue("abc")));
+        $this->assertTrue($actual);
+
+        # 2
+        $actual = $this->db->SelectRows("test_query", array("key"=>MySQL::SQLValue("NotExists")));
+        $this->assertTrue($actual);
+
+        # 3
+        $actual = $this->db->SelectRows("NonExistentTable", array("id"=>MySQL::SQLValue("1")));
+        $this->assertFalse($actual);
+    }
+
+    public function testSelectTable()
+    {
+        # 1
+        $actual = $this->db->SelectTable("test_query");
+        $this->assertTrue($actual);
+
+        # 2
+        $actual = $this->db->SelectTable("test_query");
+        $this->assertTrue($actual);
+
+        # 3
+        $actual = $this->db->SelectTable("NonExistentTable");
+        $this->assertFalse($actual);
+    }
+
     public function testGetLastSql()
     {
         $expected = "INSERT INTO `test_query` (`key`, `value`) VALUES ('abc', 'def')";
@@ -348,5 +378,16 @@ final class QueryTest extends TestCase
         $actual = $this->db->TruncateTable("test_delete");
         $this->assertTrue($actual);
     }
-    
+
+    public function testSelectDatabase()
+    {
+        # 1
+        $actual = $this->db->SelectDatabase("testdb");
+        $this->assertTrue($actual);
+
+        # 2
+        $actual = $this->db->SelectDatabase("NonExistentDB");
+        $this->assertFalse($actual);
+    }
+
 }

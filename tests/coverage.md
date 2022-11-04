@@ -36,6 +36,12 @@ ALTER TABLE `test_table`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 ```
 
+OR, just type
+
+```console
+mysql -uroot -p < tests/db.sql
+```
+
 after this, you can use PHPUnit
 
 ```console
@@ -44,7 +50,7 @@ user@pc:/var/www/html/ultimatemysql$ ./vendor/bin/phpunit --testdox tests
 ```
 
 ## Groups of functions
-**Actual coverage: 62/65** ![28%](https://progress-bar.dev/95)
+**Actual coverage: 65/65** ![100%](https://progress-bar.dev/100)
   
 ***MYSQL***
 - [x] MySQL __construct ([boolean $connect = true], [string $database = ""], [string $server = ""], [string $username = ""], [string $password = ""], [string $charset = ""])
@@ -105,9 +111,9 @@ user@pc:/var/www/html/ultimatemysql$ ./vendor/bin/phpunit --testdox tests
 - [x] array RowArray ([integer $optional_row_number = null], [integer $resultType = MYSQL_BOTH])
 - [x] integer RowCount ()
 - [x] boolean TruncateTable (string $tableName)
-- [ ] boolean SelectDatabase (string $database, [string $charset = ""])
-- [ ] boolean SelectRows (string $tableName, [array $whereArray = null], [array/string $columns = null], [array/string $sortColumns = null], [boolean $sortAscending = true], [integer/string $limit = null])
-- [ ] boolean SelectTable (string $tableName)
+- [x] boolean SelectDatabase (string $database, [string $charset = ""])
+- [x] boolean SelectRows (string $tableName, [array $whereArray = null], [array/string $columns = null], [array/string $sortColumns = null], [boolean $sortAscending = true], [integer/string $limit = null])
+- [x] boolean SelectTable (string $tableName)
 
 
 ***VALUES***

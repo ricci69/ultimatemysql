@@ -1467,17 +1467,21 @@ class MySQL
 		$return_value = true;
 		if (! $charset) $charset = $this->db_charset;
 		$this->ResetError();
-		if (! (mysqli_select_db($this->mysql_link, $database))) {
-			$this->SetError();
-			$return_value = false;
-		} else {
-			if ((strlen($charset) > 0)) {
-				if (! (mysqli_query($this->mysql_link, "SET CHARACTER SET '{$charset}'"))) {
-					$this->SetError();
-					$return_value = false;
-				}
+
+		try {
+			mysqli_select_db($this->mysql_link, $database);
+		} catch (mysqli_sql_exception $e) {
+            $this->SetError($e->getMessage(), $e->getCode());
+            return false;
+        }
+
+		if ((strlen($charset) > 0)) {
+			if (! (mysqli_query($this->mysql_link, "SET CHARACTER SET '{$charset}'"))) {
+				$this->SetError();
+				$return_value = false;
 			}
 		}
+
 		return $return_value;
 	}
 
@@ -1494,7 +1498,7 @@ class MySQL
 	 * @param boolean $sortAscending (Optional) TRUE for ascending; FALSE for descending
 	 *                               This only works if $sortColumns are specified
 	 * @param integer/string $limit (Optional) The limit of rows to return
-	 * @return boolean Returns records on success or FALSE on error
+	 * @return boolean Returns TRUE on success or FALSE on error
 	 */
 	public function SelectRows($tableName, $whereArray = null, $columns = null,
 							   $sortColumns = null, $sortAscending = true,
@@ -1506,9 +1510,9 @@ class MySQL
 		} else {
 			$sql = self::BuildSQLSelect($tableName, $whereArray,
 					$columns, $sortColumns, $sortAscending, $limit);
-			// Execute the UPDATE
-			if (! $this->Query($sql)) {
-				return $this->last_result;
+			// Execute the query
+			if (!$this->Query($sql)) {
+				return false;
 			} else {
 				return true;
 			}
@@ -1519,7 +1523,7 @@ class MySQL
 	 * Retrieves all rows in a specified table
 	 *
 	 * @param string $tableName The name of the table
-	 * @return boolean Returns records on success or FALSE on error
+	 * @return boolean Returns TRUE on success or FALSE on error
 	 */
 	public function SelectTable($tableName) {
 		return $this->SelectRows($tableName);
