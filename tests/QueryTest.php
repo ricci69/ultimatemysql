@@ -40,7 +40,7 @@ final class QueryTest extends TestCase
 
         # 4
         $actual = $this->db->QueryArray("SELECT * FROM `test_table` WHERE `id` = 10");
-        $this->assertFalse($actual);
+        $this->assertIsArray($actual);
     }
 
     public function testQuerySingleRow()
@@ -97,4 +97,256 @@ final class QueryTest extends TestCase
         $actual = $this->db->QuerySingleValue("SELECT * FROM `test_table` WHERE `id` = 10");
         $this->assertFalse($actual);
     }
+    
+    public function testAutoInsertUpdate()
+    {
+        # 1
+        $expected = "bar";
+    
+        $this->db->AutoInsertUpdate("test_query", array("key"=>MySQL::SQLValue("foo"), "value"=>MySQL::SQLValue("bar")), array("key"=>MySQL::SQLValue("foo")));
+        $actual = $this->db->QuerySingleValue("SELECT `value` FROM `test_query` WHERE `key` = 'foo'");
+        
+        $this->assertSame($expected, $actual);
+        
+        # 2
+        $expected = "baz";
+    
+        $this->db->AutoInsertUpdate("test_query", array("key"=>MySQL::SQLValue("foo"), "value"=>MySQL::SQLValue("baz")), array("key"=>MySQL::SQLValue("foo")));
+        $actual = $this->db->QuerySingleValue("SELECT `value` FROM `test_query` WHERE `key` = 'foo'");
+        
+        $this->assertSame($expected, $actual);   
+        
+        # 3
+        $actual = $this->db->AutoInsertUpdate("NonExistentTable", array("key"=>MySQL::SQLValue("foo"), "value"=>MySQL::SQLValue("bar")), array("key"=>MySQL::SQLValue("foo")));
+        $this->assertFalse($actual);
+    }
+    
+    public function testInsertRow()
+    {
+        # 1
+        $actual = $this->db->InsertRow("test_query", array("key"=>MySQL::SQLValue("abc"), "value"=>MySQL::SQLValue("def")));
+        $this->assertIsNumeric($actual);
+        
+        # 2
+        $actual = $this->db->InsertRow("NonExistentTable", array("key"=>MySQL::SQLValue("foo"), "value"=>MySQL::SQLValue("bar")), array("key"=>MySQL::SQLValue("foo")));
+        $this->assertFalse($actual);
+    }  
+    
+    public function testGetLastInsertId()
+    {
+        # 1
+        $this->db->InsertRow("test_query", array("key"=>MySQL::SQLValue("abc"), "value"=>MySQL::SQLValue("def")));
+        $actual = $this->db->GetLastInsertID();
+        $this->assertIsNumeric($actual);
+        
+        # 2
+        $this->db->InsertRow("NonExistentTable", array("key"=>MySQL::SQLValue("foo"), "value"=>MySQL::SQLValue("bar")), array("key"=>MySQL::SQLValue("foo")));
+        $actual = $this->db->GetLastInsertID();
+        $this->assertFalse($actual);        
+        
+        # 3
+        $this->db->SelectRows("test_query", array("key"=>MySQL::SQLValue("abc")));
+        $actual = $this->db->GetLastInsertID();
+        $this->assertFalse($actual);          
+        
+        # 4
+        $this->db->InsertRow("test_query", array("key"=>MySQL::SQLValue("abc"), "value"=>MySQL::SQLValue("def")));
+        $this->db->DeleteRows("test_query", array("key"=>MySQL::SQLValue("abc")));
+        $actual = $this->db->GetLastInsertID();
+        $this->assertFalse($actual);        
+    }
+
+    public function testUpdateRows()
+    {
+        # 1
+        $actual = $this->db->UpdateRows("test_query", array("key"=>MySQL::SQLValue("abc"), "value"=>MySQL::SQLValue("def")), array("id"=>MySQL::SQLValue("1")));
+        $this->assertTrue($actual);
+        
+        # 2
+        $actual = $this->db->UpdateRows("NonExistentTable", array("key"=>MySQL::SQLValue("foo"), "value"=>MySQL::SQLValue("bar")), array("id"=>MySQL::SQLValue("1")));
+        $this->assertFalse($actual);
+    }      
+    
+    public function testDeleteRows()
+    {
+        # 1
+        $actual = $this->db->DeleteRows("test_query", array("key"=>MySQL::SQLValue("abc")));
+        $this->assertTrue($actual);
+        
+        # 2
+        $actual = $this->db->DeleteRows("test_query", array("key"=>MySQL::SQLValue("NotExists")));
+        $this->assertTrue($actual);        
+        
+        # 3
+        $actual = $this->db->DeleteRows("NonExistentTable", array("id"=>MySQL::SQLValue("1")));
+        $this->assertFalse($actual);
+    }    
+    
+    public function testGetLastSql()
+    {
+        $expected = "INSERT INTO `test_query` (`key`, `value`) VALUES ('abc', 'def')";
+        $this->db->InsertRow("test_query", array("key"=>MySQL::SQLValue("abc"), "value"=>MySQL::SQLValue("def")));
+        $actual = $this->db->GetLastSQL();
+        $this->assertSame($expected, $actual);
+    }
+    
+    public function testHasRecords()
+    {
+        # 1
+        $actual = $this->db->HasRecords("SELECT `name` FROM `test_table` WHERE `id` = 1");
+        $this->assertTrue($actual);      
+        
+        # 2
+        $actual = $this->db->HasRecords();
+        $this->assertTrue($actual);    
+        
+        # 3
+        $actual = $this->db->HasRecords("UPDATE `test_query` set `value`='baz' WHERE `key` = 'foo'");
+        $this->assertFalse($actual);         
+        
+        # 4
+        $actual = $this->db->HasRecords("SELECT `name` FROM `test_table` WHERE `id` = 100");
+        $this->assertFalse($actual);          
+    }
+
+    public function testRecords()
+    {
+        # 1
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 1");
+        $actual = $this->db->Records();
+        $this->assertIsObject($actual);      
+        
+        # 2
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 100");
+        $actual = $this->db->Records();
+        $this->assertIsObject($actual);
+        
+        # 3
+        $this->db->Query("UPDATE `test_query` set `value`='baz' WHERE `key` = 'foo'");
+        $actual = $this->db->Records();
+        $this->assertTrue($actual);         
+        
+        # 4
+        $this->db->Query("SELECT `name` FROM `NonExistentTable` WHERE `id` = 100");
+        $actual = $this->db->Records();
+        $this->assertFalse($actual);          
+    }  
+
+    public function testRecordsArray()
+    {
+        # 1
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 1");
+        $actual = $this->db->RecordsArray();
+        $this->assertIsArray($actual);      
+        
+        # 2
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 100");
+        $actual = $this->db->RecordsArray();
+        $this->assertIsArray($actual);    
+        
+        # 3
+        $this->db->Query("UPDATE `test_query` set `value`='baz' WHERE `key` = 'foo'");
+        $actual = $this->db->RecordsArray();
+        $this->assertIsArray($actual);         
+        
+        # 4
+        $this->db->Query("SELECT `name` FROM `NonExistentTable` WHERE `id` = 100");
+        $actual = $this->db->RecordsArray();
+        $this->assertFalse($actual);          
+    }    
+    
+    public function testRow()
+    {
+        # 1
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 1");
+        $actual = $this->db->Row();
+        $this->assertIsObject($actual);      
+        
+        # 2
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 1");
+        $actual = $this->db->Row(0);
+        $this->assertIsObject($actual);         
+        
+        # 3
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 1");
+        $actual = $this->db->Row(100);
+        $this->assertFalse($actual);           
+        
+        # 4
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 100");
+        $actual = $this->db->Row();
+        $this->assertFalse($actual);
+        
+        # 5
+        $this->db->Query("UPDATE `test_query` set `value`='baz' WHERE `key` = 'foo'");
+        $actual = $this->db->Row();
+        $this->assertFalse($actual);         
+        
+        # 6
+        $this->db->Query("SELECT `name` FROM `NonExistentTable` WHERE `id` = 100");
+        $actual = $this->db->Row();
+        $this->assertFalse($actual);          
+    }
+    
+    public function testRowArray()
+    {
+        # 1
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 1");
+        $actual = $this->db->RowArray();
+        $this->assertIsArray($actual);      
+        
+        # 2
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 1");
+        $actual = $this->db->RowArray(0);
+        $this->assertIsArray($actual);         
+        
+        # 3
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 1");
+        $actual = $this->db->RowArray(100);
+        $this->assertFalse($actual);           
+        
+        # 4
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 100");
+        $actual = $this->db->RowArray();
+        $this->assertFalse($actual);
+        
+        # 5
+        $this->db->Query("UPDATE `test_query` set `value`='baz' WHERE `key` = 'foo'");
+        $actual = $this->db->RowArray();
+        $this->assertFalse($actual);         
+        
+        # 6
+        $this->db->Query("SELECT `name` FROM `NonExistentTable` WHERE `id` = 100");
+        $actual = $this->db->RowArray();
+        $this->assertFalse($actual);          
+    }
+    
+    public function testHasRowCount()
+    {
+        # 1
+        $expected = 1;
+        
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 1");
+        $actual = $this->db->RowCount();
+        
+        $this->assertSame($expected, $actual);      
+        
+        # 2
+        $this->db->Query("UPDATE `test_query` set `value`='baz' WHERE `key` = 'foo'");
+        $actual = $this->db->RowCount();
+        $this->assertFalse($actual);         
+        
+        # 3
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 100");
+        $actual = $this->db->RowCount();        
+        $this->assertFalse($actual);        
+    }
+    
+    public function testTruncateTable()
+    {
+        $this->db->Query("CREATE TABLE IF NOT EXISTS `test_delete` (  `id` int NOT NULL,  `key` varchar(25) NOT NULL,  `value` varchar(50) NOT NULL)");
+        $actual = $this->db->TruncateTable("test_delete");
+        $this->assertTrue($actual);
+    }
+    
 }

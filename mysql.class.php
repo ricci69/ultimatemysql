@@ -1120,6 +1120,8 @@ class MySQL
             $this->last_result = @mysqli_query($this->mysql_link, $sql);
 		} catch (mysqli_sql_exception $e) {
             $this->SetError($e->getMessage(), $e->getCode());
+            $this->last_result = false;
+            $this->last_insert_id = false;
             return false;
         }
 
@@ -1145,9 +1147,10 @@ class MySQL
 				} else {
 					$this->active_row = -1;
 				}
-				$this->last_insert_id = 0;
+				$this->last_insert_id = false;
 				return $this->last_result;
 			} else {
+                $this->last_insert_id = false;
 				return $this->last_result;
 			}
 		}
@@ -1242,7 +1245,8 @@ class MySQL
 	 * Returns the records from the last query
 	 *
 	 * @return object PHP 'mysql result' resource object containing the records
-	 *                for the last query executed
+	 *                on SELECT, SHOW, DESCRIBE or EXPLAIN queries and returns
+	 *                TRUE or FALSE for all others i.e. UPDATE, DELETE, DROP
 	 */
 	public function Records() {
 		return $this->last_result;
@@ -1258,10 +1262,14 @@ class MySQL
 	 */
 	public function RecordsArray($resultType = MYSQLI_BOTH) {
 		$this->ResetError();
-		if ($this->last_result) {
+		if ($this->last_result) { 
+		
+            if (!is_object($this->last_result))
+                return array(array());
+		
 			if (! mysqli_data_seek($this->last_result, 0)) {
 				$this->SetError();
-				return false;
+				return array(array());
 			} else {
 				//while($member = mysqli_fetch_object($this->last_result)){
 				while ($member = mysqli_fetch_array($this->last_result, $resultType)){
