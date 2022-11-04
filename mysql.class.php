@@ -2,7 +2,10 @@
 /**
  * Ultimate MySQL Wrapper Class
  *
- * @version 3.0
+ * @version 4.0
+ * @link https://github.com/ricci69/ultimatemysql/
+ *
+ * Code up to the version 3.0
  * @author Jeff L. Williams
  * @link http://www.phpclasses.org/ultimatemysql
  *
