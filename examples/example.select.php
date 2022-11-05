@@ -43,7 +43,7 @@ if ($db->Error()) $db->Kill();
 // Or: if ($db->Error()) echo $db->Error();
 
 // Execute our query
-if (! $db->Query("SELECT * FROM Test")) $db->Kill();
+if (! $db->Query("SELECT * FROM Test")) echo $db->Error();
 
 // Let's show how many records were returned
 echo $db->RowCount() . " records returned.<br />\n<hr />\n";
