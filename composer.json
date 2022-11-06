@@ -4,6 +4,7 @@
     "description": "MySQL database access wrapper compatible with PHP 80",
     "keywords": ["mysql","php","database"],
     "homepage": "https://github.com/ricci69/ultimatemysql",
+    "license": "MIT",
     "require": {
         "php": ">=8.0.0"
     },    
