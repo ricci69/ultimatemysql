@@ -5,6 +5,8 @@
     "keywords": ["mysql","php","database"],
     "homepage": "https://github.com/ricci69/ultimatemysql",
     "license": "MIT",
+    "version": "4.1",
+    "minimum-stability": "stable",
     "require": {
         "php": ">=8.0.0"
     },    
