@@ -1,11 +1,11 @@
 {
     "name": "ricci69/ultimatemysql",
     "type": "library",
-    "description": "MySQL database access wrapper compatible with PHP 80",
+    "description": "MySQL database access wrapper compatible with PHP 8.0",
     "keywords": ["mysql","php","database"],
     "homepage": "https://github.com/ricci69/ultimatemysql",
     "license": "MIT",
-    "version": "4.1",
+    "version": "4.2",
     "minimum-stability": "stable",
     "require": {
         "php": ">=8.0.0"

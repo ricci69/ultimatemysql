@@ -56,7 +56,8 @@ class MySQL
 	private $last_sql       = "";       // last mysql query
 	private $time_diff      = 0;        // holds the difference in time
 	private $time_start     = 0;        // start time for the timer
-
+    private $debug          = false;    // debug mode (default OFF)
+	
 	/**
 	 * Determines if an error throws an exception
 	 *
@@ -87,7 +88,12 @@ class MySQL
 			strlen($this->db_user) > 0) {
 			if ($connect) $this->Open();
 		}
-
+		
+		// Check if the debug mode is ON, and set the file path for Query() function
+		if (file_exists(dirname(__DIR__)."/.debugmysql")) // Normal library path
+            $this->debug = dirname(__DIR__)."/.debugmysql";
+        elseif(file_exists(dirname(__DIR__)."/ultimatemysql/.debugmysql")) // Composer path
+            $this->debug = dirname(__DIR__)."/ultimatemysql/.debugmysql";
 	}
 
 	/**
@@ -1118,6 +1124,9 @@ class MySQL
 	public function Query($sql) {
 		$this->ResetError();
 		$this->last_sql = $sql;
+		
+        if ($this->debug)
+            file_put_contents($this->debug, date("Y-m-d H:i:s")." : ".$sql.PHP_EOL, FILE_APPEND);		
 		
 		try {
             $this->last_result = @mysqli_query($this->mysql_link, $sql);

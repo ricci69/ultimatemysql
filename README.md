@@ -35,6 +35,11 @@ $res = $db->QueryArray("SELECT * FROM Test");
 ?>
 ```
 
+### Debug mode
+The script looks for a file called ```.debugmysql``` (within the root directory or within the composer's vendor / module folder) and, if found, enters debug mode.
+
+When debug mode is active, it writes all SQL queries executed inside the ```.debugmysql``` file.
+
 ## How it work and examples
 Check the "examples" directory to learn how it works, or read the [help.html](/help.html) file (a very good documentation)
 

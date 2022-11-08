@@ -142,7 +142,7 @@ font-size: 12px;
 </head>
 <body>
 <div class="page-body">
-<h2 class="class-name">Ultimate MySQL Class</h2>
+<h2 class="class-name">Ultimate MySQL Class</h2><h4>Documention for version 4.2</h4>
 <a name="sec-description"></a>
 <div class="info-box">
 <div class="info-box-title">Description</div>
@@ -194,19 +194,31 @@ Jul 06, 2009 - GetXML() and GetJSON() contribution from Emre Erkan<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and ability to use a blank password if needed<br />
 Aug 16, 2013 - Version 3.0 - Updated class to mysqli extension<br />
 Oct 26, 2022 - Created Github repository with the aim of making the class compatible with PHP 8<br />
-Nov 04, 2022 - Released the version 4.0 with the PHPUnit test cases and a lot of bug fix
+Nov 04, 2022 - Released the version 4.0 with the PHPUnit test cases and a lot of bug fix<br />
+Nov 06, 2022 - Version 4.1 - The library is now installable with Composer.<br />
+Nov 08, 2022 - Version 4.2 - Added the debug mode<br />
 </p>
 </p>
-<ul class="tags">
-<li><span class="field">version:</span> 4.0</li>
-</ul>
-<p>Usage:</p>
-<p><code><span style="font: 12pt Fixedsys;"><span class="php1-reservedword">include</span><span class="php1-symbol">(</span><span class="php1-string">&quot;mysql.class.php&quot;</span><span class="php1-symbol">);</span></span></code></p>
+<p>&nbsp;</p>
+<p><b>Usage (normal library)</b></p>
+<p><code><span style="font: 12pt Fixedsys;"><span class="php1-reservedword">include</span>&nbsp;<span class="php1-symbol"></span><span class="php1-string">&quot;mysql.class.php&quot;</span><span class="php1-symbol">;</span></span></code></p>
 <p><code><span style="font: 12pt Fixedsys;"><span class="php1-variable">$db </span><span class="php1-symbol">=</span> <span class="php1-reservedword">new</span> <span class="php1-identifier">MySQL</span><span class="php1-symbol">(</span>)<span class="php1-symbol">;</span></span></code>
 <br />
 <code><span style="font: 12pt Fixedsys;"><span class="php1-variable">$db </span><span class="php1-symbol">=</span> <span class="php1-reservedword">new</span> <span class="php1-identifier">MySQL</span><span class="php1-symbol">(</span><span class="php1-string">true</span><span class="php1-symbol">,</span><span class="php1-space"> </span><span class="php1-string">&quot;database&quot;</span>)<span class="php1-symbol">;</span></span></code>
 <br />
 <code><span style="font: 12pt Fixedsys;"><span class="php1-variable">$db </span><span class="php1-symbol">=</span> <span class="php1-reservedword">new</span> <span class="php1-identifier">MySQL</span><span class="php1-symbol">(</span><span class="php1-string">true</span><span class="php1-symbol">,</span><span class="php1-space"> </span><span class="php1-string">&quot;database&quot;</span><span class="php1-symbol">,</span><span class="php1-space"> </span><span class="php1-string">&quot;localhost&quot;</span><span class="php1-symbol">,</span><span class="php1-space"> </span><span class="php1-string">&quot;username&quot;</span><span class="php1-symbol">,</span><span class="php1-space"> </span><span class="php1-string">&quot;password&quot;</span>)<span class="php1-symbol">;</span></span></code></p>
+<p>&nbsp;</p>
+<p><b>Usage (composer)</b></p>
+<p><code><span style="font: 12pt Fixedsys;"><span class="php1-reservedword">require</span><span class="php1-symbol"></span>&nbsp;<span class="php1-string">&quot;vendor/autoload.php&quot;</span><span class="php1-symbol">;</span></span></code></p>
+<p><code><span style="font: 12pt Fixedsys;"><span class="php1-variable">$db </span><span class="php1-symbol">=</span> <span class="php1-reservedword">new</span> <span class="php1-identifier">MySQL</span><span class="php1-symbol">(</span>)<span class="php1-symbol">;</span></span></code>
+<br />
+<code><span style="font: 12pt Fixedsys;"><span class="php1-variable">$db </span><span class="php1-symbol">=</span> <span class="php1-reservedword">new</span> <span class="php1-identifier">MySQL</span><span class="php1-symbol">(</span><span class="php1-string">true</span><span class="php1-symbol">,</span><span class="php1-space"> </span><span class="php1-string">&quot;database&quot;</span>)<span class="php1-symbol">;</span></span></code>
+<br />
+<code><span style="font: 12pt Fixedsys;"><span class="php1-variable">$db </span><span class="php1-symbol">=</span> <span class="php1-reservedword">new</span> <span class="php1-identifier">MySQL</span><span class="php1-symbol">(</span><span class="php1-string">true</span><span class="php1-symbol">,</span><span class="php1-space"> </span><span class="php1-string">&quot;database&quot;</span><span class="php1-symbol">,</span><span class="php1-space"> </span><span class="php1-string">&quot;localhost&quot;</span><span class="php1-symbol">,</span><span class="php1-space"> </span><span class="php1-string">&quot;username&quot;</span><span class="php1-symbol">,</span><span class="php1-space"> </span><span class="php1-string">&quot;password&quot;</span>)<span class="php1-symbol">;</span></span></code></p>
+<p>&nbsp;</p>
+<p><b>Debug mode</b></p>
+<p>The script looks for a file called .debugmysql (within the root directory or within the composer's vendor / module folder) and, if found, enters debug mode.<br />
+When debug mode is active, it writes all SQL queries executed inside the .debugmysql file.</p>
 </div>
 </div>
 <a name="sec-const-summary"></a>
