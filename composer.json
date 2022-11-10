@@ -5,7 +5,7 @@
     "keywords": ["mysql","php","database"],
     "homepage": "https://github.com/ricci69/ultimatemysql",
     "license": "MIT",
-    "version": "4.2",
+    "version": "4.3",
     "minimum-stability": "stable",
     "require": {
         "php": ">=7.0"
