@@ -1630,7 +1630,7 @@ class MySQL
 			case "string":
 			case "varchar":
 			case "char":
-				if (strlen($value) == 0) {
+				if (is_null($value) || strlen($value) == 0) {
 					$return_value = "NULL";
 				} else {
 					$value = stripslashes($value);
