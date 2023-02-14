@@ -27,7 +27,7 @@ define('MYSQL_ASSOC',MYSQLI_ASSOC);
 class MySQL
 {
 	// SET THESE VALUES TO MATCH YOUR DATA CONNECTION
-	private $db_host    = "localhost"; // server name
+	private $db_host    = "127.0.0.1"; // server name
 	private $db_user    = "";          // user name
 	private $db_pass    = "";          // password
 	private $db_dbname  = "";          // database name

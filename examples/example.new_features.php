@@ -5,7 +5,7 @@ $db = new MySQL();
 
 // Connect to the database
 // CHANGE THESE VALUES TO MATCH YOUR DATABASE!
-if (! $db->Open(true, "test", "localhost", "root", "password")) $db->Kill();
+if (! $db->Open(true, "test", "127.0.0.1", "root", "password")) $db->Kill();
 
 // --------------------------------------------------------------------------
 // Want to know if you are connected? Use IsConnected()

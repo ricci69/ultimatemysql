@@ -7,7 +7,7 @@ final class TimerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->db = new MySQL(true,"testdb","localhost","root","root");
+        $this->db = new MySQL(true,"testdb","127.0.0.1","root","root");
     }
     
     public function testQueryTimed()

@@ -4,7 +4,7 @@ include("mysql.class.php");
 $db = new MySQL();
 
 // *OR* you can fill in these details when the object is created
-// $db = new MySQL(true, "Test", "localhost", "root", "password");
+// $db = new MySQL(true, "Test", "127.0.0.1", "root", "password");
 
 /*
 -- --------------------------------------------
@@ -23,7 +23,7 @@ CREATE TABLE `test` (
 // (Also note that you can fill in the variables in the top of the class
 // if you want to automatically connect when the object is created. If
 // you fill in the values when you create the obect, this is not needed.)
-if (! $db->Open("test", "localhost", "root", "password")) {
+if (! $db->Open("test", "127.0.0.1", "root", "password")) {
     $db->Kill();
 }
 echo "You are connected to the database<br />\n";

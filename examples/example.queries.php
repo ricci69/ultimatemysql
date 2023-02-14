@@ -25,7 +25,7 @@ include("mysql.class.php");
 // See the top section of the mysql.class.php file for more info.
 
 // CHANGE THESE VALUES TO MATCH YOUR DATABASE!
-$db = new MySQL(true, "test", "localhost", "root", "password");
+$db = new MySQL(true, "test", "127.0.0.1", "root", "password");
 
 // This checks for errors and if there is one, terminates the script
 // while showing the last MySQL error.

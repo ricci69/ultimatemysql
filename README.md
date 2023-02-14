@@ -16,7 +16,7 @@ You can start with only 3 lines!
 ```php
 <?php
 include("mysql.class.php");
-$db = new MySQL(true, "testdb", "localhost", "root", "password");
+$db = new MySQL(true, "testdb", "127.0.0.1", "root", "password");
 $res = $db->QueryArray("SELECT * FROM Test");
 ?>
 ```
@@ -30,7 +30,7 @@ and after use the following PHP code
 ```php
 <?php
 require 'vendor/autoload.php';
-$db = new MySQL(true, "testdb", "localhost", "root", "password");
+$db = new MySQL(true, "testdb", "127.0.0.1", "root", "password");
 $res = $db->QueryArray("SELECT * FROM Test");
 ?>
 ```

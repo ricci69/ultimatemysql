@@ -33,7 +33,7 @@ include("mysql.class.php");
 // this information can be set aurtomatically for you in the header
 // of the mysql.class.php file and these parameters are all optional.
 // See the top section of the mysql.class.php file for more info.
-$db = new MySQL(true, "test", "localhost", "root", "password");
+$db = new MySQL(true, "test", "127.0.0.1", "root", "password");
 
 // This checks for errors and if there is one, terminates the script
 // while showing the last MySQL error.

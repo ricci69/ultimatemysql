@@ -37,7 +37,7 @@ final class MYSQLTest extends TestCase
     {
         $this->assertInstanceOf(
             MySQL::class,
-            $db = new MySQL(true,"testdb","localhost","root","root")
+            $db = new MySQL(true,"testdb","127.0.0.1","root","root")
         );
         $this->assertTrue($db->isConnected());
     }      
@@ -46,7 +46,7 @@ final class MYSQLTest extends TestCase
     {
         $this->assertInstanceOf(
             MySQL::class,
-            $db = new MySQL(true,"testdb","localhost","root","root")
+            $db = new MySQL(true,"testdb","127.0.0.1","root","root")
         );
         
         $this->assertTrue($db->Close());
