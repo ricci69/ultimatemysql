@@ -23,7 +23,7 @@ jobs:
 
     - name: Import MySQL test DB
       run: |
-        mysql --host 127.0.0.1 --port 3306 -uroot -proot < tests/db.sql
+        mysql --host 127.0.0.1 --port 3306 -uroot -proot < ./tests/db.sql
         
     - name: Compose setup
       run: |
