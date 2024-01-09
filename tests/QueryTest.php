@@ -205,7 +205,7 @@ final class QueryTest extends TestCase
         $expected = array("id"=>"1", "key"=>"123", "value"=>null);
         $actual = $this->db->UpdateRows("test_query", array("key"=>MySQL::SQLValue("baz")), array(0=>'`key` IS NOT NULL', "value"=>null));
         $this->assertTrue($actual);
-        //$this->assertSame(1, $this->db->RowCount()); TODO
+        $this->assertSame(1, $this->db->RowCount());
     }
 
     public function testDeleteRows()
@@ -428,13 +428,17 @@ final class QueryTest extends TestCase
         # 3
         $this->db->Query("UPDATE `test_query` set `value`='baz' WHERE `key` = 'foo'");
         $actual = $this->db->RowCount();
-        $this->assertFalse($actual);         
-        
-        
+        $this->assertSame(0, $actual);
+
         # 4
         $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 100");
-        $actual = $this->db->RowCount();        
-        $this->assertFalse($actual);        
+        $actual = $this->db->RowCount();
+        $this->assertSame(0, $actual);
+
+        # 5
+        $this->db->Query("SELECT `name` FROM `NonExistentTable` WHERE `id` = 100");
+        $actual = $this->db->RowCount();
+        $this->assertFalse($actual);
     }
     
     public function testTruncateTable()
