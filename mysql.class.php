@@ -1495,7 +1495,7 @@ class MySQL {
             return false;
         } else {
             $result = @mysqli_affected_rows($this->mysql_link);
-            if ($result === false) {
+            if ($result === -1) {
                 $this->SetError();
                 return false;
             } else {
