@@ -1358,11 +1358,11 @@ class MySQL {
         if ($this->last_result) {
 
             if (!is_object($this->last_result))
-                return array(array());
+                return array();
 
             if (!mysqli_data_seek($this->last_result, 0)) {
                 $this->SetError();
-                return array(array());
+                return array();
             } else {
                 //while($member = mysqli_fetch_object($this->last_result)){
                 while ($member = mysqli_fetch_array($this->last_result, $resultType)) {

@@ -316,24 +316,33 @@ final class QueryTest extends TestCase
         # 1
         $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 1");
         $actual = $this->db->RecordsArray();
-        $this->assertIsArray($actual);      
+        $this->assertIsArray($actual);
+        $this->assertSame(1, count($actual));
         
         # 2
         $this->db->Query("SELECT `name` FROM `test_table` WHERE `id` = 100");
         $actual = $this->db->RecordsArray();
-        $this->assertIsArray($actual);    
+        $this->assertIsArray($actual);
+        $this->assertTrue(!$actual);
         
         # 3
         $this->db->Query("UPDATE `test_query` set `value`='baz' WHERE `key` = 'foo'");
         $actual = $this->db->RecordsArray();
-        $this->assertIsArray($actual);         
+        $this->assertIsArray($actual);
+        $this->assertTrue(!$actual);
         
         # 4
         $this->db->Query("SELECT `name` FROM `NonExistentTable` WHERE `id` = 100");
         $actual = $this->db->RecordsArray();
-        $this->assertFalse($actual);          
-    }    
+        $this->assertFalse($actual);
     
+        # 5
+        $this->db->Query("SELECT `name` FROM `test_table`");
+        $actual = $this->db->RecordsArray();
+        $this->assertIsArray($actual);
+        $this->assertSame($this->db->RowCount(), count($actual));
+    }
+
     public function testRow()
     {
         # 1
