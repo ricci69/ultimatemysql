@@ -667,7 +667,8 @@ class MySQL {
                 }
             }
         } else {
-            
+            if (is_int($column))
+                $column = $this->GetColumnName($column, $table);
             try {
             $records = mysqli_query($this->mysql_link, "SELECT " . $column . " FROM " . $table . " LIMIT 1");
             } catch (mysqli_sql_exception $e) {
