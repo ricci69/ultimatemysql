@@ -567,8 +567,8 @@ class MySQL {
     }
 
     /**
-     * This function returns the data type for a specified column. If
-     * the column does not exists or no records exist, it returns FALSE
+     * This function returns the data type ID for a specified column.
+     * If the column does not exists or no records exist, it returns FALSE
      *
      * @param string|int $column Column name or number (first column is 0)
      * @param string $table (Optional) If a table name is not specified, the
@@ -604,6 +604,46 @@ class MySQL {
                 $this->SetError("The specified column or table does not exist, or no data was returned", -1);
                 return false;
             }
+        }
+    }
+
+    /**
+     * This function returns the data type NAME for a specified column.
+     * If the column does not exists or no records exist, it returns FALSE
+     *
+     * @param string|int $column Column name or number (first column is 0)
+     * @param string $table (Optional) If a table name is not specified, the
+     *                      last returned records are used
+     * @return string|boolean MySQL data (field) type. FALSE on error
+     */
+    public function GetColumnDataTypeName($column, $table = "") {
+        $this->ResetError();
+        if (empty($table)) {
+            if ($this->RowCount() > 0) {
+                if (is_int($column)) {
+                    $field = mysqli_fetch_field_direct($this->last_result, $column);
+                    $table = $field->table;
+                } else {
+                    $columnID = $this->GetColumnID($column);
+                    if ($columnID === false)
+                        return false;
+
+                    $field = mysqli_fetch_field_direct($this->last_result, $columnID);
+                    $table = $field->table;
+                }
+            } else {
+                return false;
+            }
+        }
+        
+        if (is_int($column))
+            $column = $this->GetColumnName($column, $table);
+        $result = $this->QueryArray("SHOW COLUMNS FROM " . $table . " WHERE Field = '" . $column . "'", MYSQLI_ASSOC);
+        if (count($result) == 1) {
+            return $result[0]["Type"];
+        } else {
+            $this->SetError("The specified column or table does not exist, or no data was returned", -1);
+            return false;
         }
     }
 

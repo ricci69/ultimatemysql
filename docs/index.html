@@ -142,7 +142,7 @@ font-size: 12px;
 </head>
 <body>
 <div class="page-body">
-<h2 class="class-name">Ultimate MySQL Class</h2><h4>Documention for version 4.5</h4>
+<h2 class="class-name">Ultimate MySQL Class</h2><h4>Documention for version 4.6</h4>
 <a name="sec-description"></a>
 <div class="info-box">
 <div class="info-box-title">Description</div>
@@ -200,7 +200,7 @@ Nov 08, 2022 - Version 4.2 - Added the debug mode<br />
 Nov 10, 2022 - Version 4.3 - Composer version is now also compatible with PHP 7<br />
 Nov 12, 2022 - Version 4.4 - Improved the debug mode for the composer version<br />
 Feb 14, 2023 - Version 4.5 - PHP 8.2 compatible<br />
-Jan 23, 2024 - Version 4.6 - Bug fixes provided by Paul Pazderski + PHP 8.3 compatible 
+Jan 23, 2024 - Version 4.6 - Bug fixes provided by Paul Pazderski + PHP 8.3 compatible
 </p>
 </p>
 <p>&nbsp;</p>
@@ -369,6 +369,11 @@ When debug mode is active, it writes all SQL queries executed inside the .debugm
 <div class="method-definition">
 <span class="method-result">string</span>
 <a href="#GetColumnDataType" title="details" class="method-name">GetColumnDataType</a>
+(<span class="var-type">string</span>&nbsp;<span class="var-name">$column</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$table</span> = <span class="var-default">""</span>])
+</div>
+<div class="method-definition">
+<span class="method-result">string</span>
+<a href="#GetColumnDataTypeName" title="details" class="method-name">GetColumnDataTypeName</a>
 (<span class="var-type">string</span>&nbsp;<span class="var-name">$column</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$table</span> = <span class="var-default">""</span>])
 </div>
 <div class="method-definition">
@@ -1165,7 +1170,7 @@ GetColumnCount
 <span class="method-title">GetColumnDataType</span>
 </div>
 <!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">This function returns the data type for a specified column. If the column does not exists or no records exist, it returns FALSE</p>
+<p class="short-description">This function returns the data type ID for a specified column. If the column does not exists or no records exist, it returns FALSE</p>
 <ul class="tags">
 <li><span class="field">return:</span> MySQL data (field) type</li>
 <li><span class="field">access:</span> public</li>
@@ -1187,6 +1192,35 @@ GetColumnDataType
 </ul>
 <p>Example:</p>
 <p><code><span style="font: 12pt Fixedsys;"><span class="php1-reservedword">echo</span> <span class="php1-string">&quot;Type: &quot;</span> <span class="php1-symbol">.</span><span class="php1-space"> $db</span><span class="php1-symbol">-&gt;</span><span class="php1-identifier">GetColumnDataType</span><span class="php1-symbol">(</span><span class="php1-string">&quot;FirstName&quot;</span><span class="php1-symbol">,</span> <span class="php1-string">&quot;Customer&quot;</span><span class="php1-symbol">);</span></span></code></p>
+</div>
+<a name="methodGetColumnDataTypeName" id="GetColumnDataTypeName"><!-- --></a>
+<div class="oddrow">
+<div class="method-header">
+<span class="method-title">GetColumnDataTypeName</span> (Available from version 4.7)
+</div>
+<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">This function returns the data type name for a specified column. If the column does not exists or no records exist, it returns FALSE</p>
+<ul class="tags">
+<li><span class="field">return:</span> MySQL data (field) type</li>
+<li><span class="field">access:</span> public</li>
+</ul>
+<div class="method-signature">
+<span class="method-result">string</span>
+<span class="method-name">
+GetColumnDataTypeName
+</span>
+(<span class="var-type">string</span>&nbsp;<span class="var-name">$column</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$table</span> = <span class="var-default">""</span>])
+</div>
+<ul class="parameters">
+<li>
+<span class="var-type">string</span>
+<span class="var-name">$column</span><span class="var-description">: Column name or number (first column is 0)</span> </li>
+<li>
+<span class="var-type">string</span>
+<span class="var-name">$table</span><span class="var-description">: (Optional) If a table name is not specified, the last returned records are used</span> </li>
+</ul>
+<p>Example:</p>
+<p><code><span style="font: 12pt Fixedsys;"><span class="php1-reservedword">echo</span> <span class="php1-string">&quot;Type: &quot;</span> <span class="php1-symbol">.</span><span class="php1-space"> $db</span><span class="php1-symbol">-&gt;</span><span class="php1-identifier">GetColumnDataTypeName</span><span class="php1-symbol">(</span><span class="php1-string">&quot;FirstName&quot;</span><span class="php1-symbol">,</span> <span class="php1-string">&quot;Customer&quot;</span><span class="php1-symbol">);</span></span></code></p>
 </div>
 <a name="methodGetColumnID" id="GetColumnID"><!-- --></a>
 <div class="oddrow">

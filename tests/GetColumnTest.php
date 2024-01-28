@@ -87,6 +87,45 @@ final class GetColumnTest extends TestCase
         $this->assertFalse($actual);          
     }
 
+    public function testGetColumnDataTypeName()
+    {
+        # 1
+        $expected = "int";
+        $actual = $this->db->GetColumnDataTypeName("id", "test_table");
+        $this->assertSame($expected, $actual);
+        
+        # 2
+        $expected = "varchar(25)";
+        $actual = $this->db->GetColumnDataTypeName("name", "test_table");
+        $this->assertSame($expected, $actual);
+        
+        # 3
+        $expected = "varchar(25)";
+        $actual = $this->db->GetColumnDataTypeName(1, "test_table");
+        $this->assertSame($expected, $actual);   
+        
+        # 4
+        $expected = "varchar(15)";
+        $actual = $this->db->GetColumnDataTypeName(3, "test_table");
+        $this->assertSame($expected, $actual);   
+        
+        # 5
+        $this->db->Query("SELECT `name` FROM `test_table`");
+        $expected = "int";
+        $actual = $this->db->GetColumnDataTypeName(0);
+        $this->assertSame($expected, $actual);
+
+        # 6
+        $expected = "date";
+        $actual = $this->db->GetColumnDataTypeName("date", "test_table");
+        $this->assertSame($expected, $actual); 
+        
+        # 7
+        $this->db->Query("SELECT `name` FROM `test_table` WHERE `id`=12345");
+        $actual = $this->db->GetColumnDataTypeName(0);
+        $this->assertFalse($actual);          
+    }    
+    
     public function testGetColumnId()
     {
         # 1
