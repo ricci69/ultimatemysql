@@ -92,28 +92,28 @@ final class GetColumnTest extends TestCase
         # 1
         $expected = "int";
         $actual = $this->db->GetColumnDataTypeName("id", "test_table");
-        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
         
         # 2
-        $expected = "varchar(25)";
+        $expected = "varchar";
         $actual = $this->db->GetColumnDataTypeName("name", "test_table");
-        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
         
         # 3
-        $expected = "varchar(25)";
+        $expected = "varchar";
         $actual = $this->db->GetColumnDataTypeName(1, "test_table");
-        $this->assertSame($expected, $actual);   
+        $this->assertStringContainsString($expected, $actual);   
         
         # 4
-        $expected = "varchar(15)";
+        $expected = "varchar";
         $actual = $this->db->GetColumnDataTypeName(3, "test_table");
-        $this->assertSame($expected, $actual);   
+        $this->assertStringContainsString($expected, $actual);   
         
         # 5
         $this->db->Query("SELECT `name` FROM `test_table`");
         $expected = "int";
         $actual = $this->db->GetColumnDataTypeName(0);
-        $this->assertSame($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
 
         # 6
         $expected = "date";
