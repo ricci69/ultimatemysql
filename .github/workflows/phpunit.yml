@@ -8,15 +8,15 @@ jobs:
     runs-on: ubuntu-latest
     
     strategy:
-      matrix:
-        # https://github.com/marketplace/actions/setup-php-action#tada-php-support
-        php-versions:
-        - '7.3'
-        - '7.4'
-        - '8.0'
-        - '8.1'
-        - '8.2'
-        - '8.3'
+       matrix:                                                                                                                                                                                                                              
+         # v5.0 Supporta SOLO PHP 8.1+                                                                                                                                                                                                      
+         php-version: [ '8.1', '8.2', '8.3', '8.4' ]                                                                                                                                                                                        
+         mysql-version: [ '8.0', '8.4' ] # Testiamo su MySQL 8.0 (LTS) e 8.4 (Latest)                                                                                                                                                       
+         include:                                                                                                                                                                                                                           
+           # Code Coverage SOLO su una combinazione (più veloce: PHP 8.3 + MySQL 8.0)                                                                                                                                                       
+           - php-version: '8.3'                                                                                                                                                                                                             
+             mysql-version: '8.0'                                                                                                                                                                                                           
+             coverage: true
     
     services:
       mysql:
@@ -64,7 +64,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:5.7
+        image:
         env:
           MYSQL_ROOT_PASSWORD: root
         ports:
