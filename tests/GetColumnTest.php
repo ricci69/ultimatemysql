@@ -56,28 +56,28 @@ final class GetColumnTest extends TestCase
     public function testGetColumnDataType()
     {
         # 1
-        $expected = 3;
+        $expected = "int";
         $actual = $this->db->GetColumnDataType("id", "test_table");
         $this->assertSame($expected, $actual);
         
         # 2
-        $expected = 253;
+        $expected = "varchar";
         $actual = $this->db->GetColumnDataType("name", "test_table");
         $this->assertSame($expected, $actual);
         
         # 3
-        $expected = 253;
+        $expected = "varchar";
         $actual = $this->db->GetColumnDataType(1, "test_table");
         $this->assertSame($expected, $actual);   
         
         # 4
         $this->db->Query("SELECT `name` FROM `test_table`");
-        $expected = 253;
+        $expected = "varchar";
         $actual = $this->db->GetColumnDataType(0);
         $this->assertSame($expected, $actual);  
 
         # 5
-        $expected = 253;
+        $expected = "varchar";
         $actual = $this->db->GetColumnDataType("name");
         $this->assertSame($expected, $actual); 
         

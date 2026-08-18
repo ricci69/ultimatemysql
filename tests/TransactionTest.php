@@ -66,7 +66,7 @@ final class TransactionTest extends TestCase
         $expected = $this->db->QuerySingleValue("SELECT `name` FROM `test_table` WHERE `id`=1");
 
         $this->assertTrue($this->db->TransactionBegin());
-        $this->assertTrue($this->db->DeleteRows("test_table", array("id = 1")));
+        $this->assertTrue($this->db->DeleteRows("test_table", array("id" => "1")));
         $this->assertTrue($this->db->TransactionRollback());
 
         $actual = $this->db->QuerySingleValue("SELECT `name` FROM `test_table` WHERE `id`=1");
@@ -74,4 +74,18 @@ final class TransactionTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
+    /** @test IsInTransaction and GetTransactionDepth reflect state */
+    public function testTransactionStateFlags(): void
+    {
+        $this->assertFalse($this->db->IsInTransaction());
+        $this->assertSame(0, $this->db->GetTransactionDepth());
+
+        $this->db->TransactionBegin();
+        $this->assertTrue($this->db->IsInTransaction());
+        $this->assertSame(1, $this->db->GetTransactionDepth());
+
+        $this->db->TransactionRollback();
+        $this->assertFalse($this->db->IsInTransaction());
+        $this->assertSame(0, $this->db->GetTransactionDepth());
+    }
 }

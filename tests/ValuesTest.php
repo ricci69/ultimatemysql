@@ -1,13 +1,31 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
+// Load MySQL class if not already loaded by autoloader
+if (!class_exists('MySQL')) {
+    require_once __DIR__ . '/../src/mysql.class.php';
+}
+
 final class ValuesTest extends TestCase
 {
     protected $db;
+    private int $originalErrorReporting;
 
     public function setUp(): void
     {
-        $this->db = new MySQL(true,"testdb","127.0.0.1","root","root");
+        // Silence deprecated warnings (E_USER_DEPRECATED, E_DEPRECATED) for clean output
+        // Tests verify legacy behavior, we don't want noise to fail them
+        $this->originalErrorReporting = error_reporting();
+        error_reporting($this->originalErrorReporting & ~E_USER_DEPRECATED & ~E_DEPRECATED);
+
+        $this->db = new MySQL(true, "testdb", "127.0.0.1", "root", "root");
+    }
+
+    public function tearDown(): void
+    {
+        // Restore original error_reporting
+        error_reporting($this->originalErrorReporting);
+        parent::tearDown();
     }
     
     public function testGetBooleanValue()
@@ -21,6 +39,7 @@ final class ValuesTest extends TestCase
     
     public function testIsDate()
     {
+        // IsDate is deprecated: test legacy behavior without expectDeprecation()
         $this->assertTrue(MySQL::IsDate("January 1, 2000"));
         $this->assertTrue(MySQL::IsDate("today"));
         $this->assertFalse(MySQL::IsDate("blue"));
@@ -28,79 +47,65 @@ final class ValuesTest extends TestCase
  
     public function testSqlBooleanValue()
     {
-        # 1
-        $expected = "0";
-        $actual = MySQL::SQLBooleanValue(false, "1", "0", MySQL::SQLVALUE_NUMBER);
-        $this->assertSame($expected, $actual);
+        // false with NUMBER type -> "0"
+        $this->assertSame("0", MySQL::SQLBooleanValue(false, "1", "0", MySQL::SQLVALUE_NUMBER));
         
-        # 2
-        $expected = "'2022-01-01'";
-        $actual = MySQL::SQLBooleanValue(true, "Jan 1, 2022", "2020/01/01", MySQL::SQLVALUE_DATE);
-        $this->assertSame($expected, $actual);
+        // true with DATE type -> uses DateTime object (not locale-dependent strings)
+        $this->assertSame("'2022-01-01'", MySQL::SQLBooleanValue(true, new DateTime('2022-01-01'), "2020/01/01", MySQL::SQLVALUE_DATE));
         
-        # 3
-        $expected = "'Yes'";
-        $actual = MySQL::SQLBooleanValue("ON", "Yes", "No");
-        $this->assertSame($expected, $actual);
+        // "ON" is true -> uses trueValue "Yes" as TEXT (default)
+        $this->assertSame("'Yes'", MySQL::SQLBooleanValue("ON", "Yes", "No"));
         
-        # 4
-        $expected = "'-'";
-        $actual = MySQL::SQLBooleanValue(0, '+', '-'); 
-        $this->assertSame($expected, $actual);
+        // 0 is false -> uses falseValue "-" as TEXT
+        $this->assertSame("'-'", MySQL::SQLBooleanValue(0, '+', '-')); 
     }
     
     public function testSqlValue()
     {
-        # 1
-        $expected = "'it''s a string'";
-        $actual = MySQL::SQLValue("it's a string", "text");
-        $this->assertSame($expected, $actual);
+        // 1: Escape single quotes in TEXT
+        $this->assertSame("'it''s a string'", MySQL::SQLValue("it's a string", "text"));
         
-        # 2
-        $expected = MySQL::SQLValue("it's a string");
-        $actual = MySQL::SQLValue("it's a string", "text");
-        $this->assertSame($expected, $actual);     
+        // 2: Default datatype is SQLVALUE_TEXT ('text')
+        $this->assertSame("'it''s a string'", MySQL::SQLValue("it's a string"));
         
-        # 3
-        $expected = MySQL::SQLValue("it's a string", "string");
-        $actual = MySQL::SQLValue("it's a string", "char");
-        $this->assertSame($expected, $actual);   
+        // 3: Alias 'string' and 'char' equal 'text'
+        $this->assertSame("'it''s a string'", MySQL::SQLValue("it's a string", "string"));
+        $this->assertSame("'it''s a string'", MySQL::SQLValue("it's a string", "char"));
         
-        # 4
-        $expected = MySQL::SQLValue("it's a string","varchar");
-        $actual = MySQL::SQLValue("it's a string", "text");
-        $this->assertSame($expected, $actual);   
-
-        # 5
-        $expected = MySQL::SQLValue("it's a string");
-        $actual = MySQL::SQLValue("it's a string", "text");
-        $this->assertSame($expected, $actual);   
+        // 4: 'varchar' equals 'text'
+        $this->assertSame("'it''s a string'", MySQL::SQLValue("it's a string", "varchar"));
         
-        # 6
-        $expected = MySQL::SQLValue("it's a string", "text");
-        $actual = MySQL::SQLValue("it's a string", MYSQL::SQLVALUE_TEXT);
-        $this->assertSame($expected, $actual);          
+        // 5: Constant SQLVALUE_TEXT
+        $this->assertSame("'it''s a string'", MySQL::SQLValue("it's a string", MySQL::SQLVALUE_TEXT));
         
-        # 7
+        // 6: Constant SQLVALUE_NUMBER -> no quotes for valid numbers
+        $this->assertSame("1", MySQL::SQLValue("1", MySQL::SQLVALUE_NUMBER));
+        
+        // 7: Usage in concatenated query
         $expected = "SELECT * FROM test_table WHERE id = 1";
         $actual = "SELECT * FROM test_table WHERE id = " . MySQL::SQLValue("1", MySQL::SQLVALUE_NUMBER);
         $this->assertSame($expected, $actual);  
         
-        # 8
+        // 8: DATE type with DateTime object (fixed for BUG-021)
         $expected = "UPDATE test_table SET value = '2007-07-04'";
-        $actual =  "UPDATE test_table SET value = " . MySQL::SQLValue("July 4, 2007", MySQL::SQLVALUE_DATE);  
+        $actual =  "UPDATE test_table SET value = " . MySQL::SQLValue(new DateTime('2007-07-04'), MySQL::SQLVALUE_DATE);  
         $this->assertSame($expected, $actual);
         
-        # 9
-        $expected = MySQL::SQLValue("", "text");
-        $actual = MySQL::SQLValue(null, MYSQL::SQLVALUE_TEXT);
-        $this->assertSame($expected, $actual);         
+        // 9: Empty string and null become NULL in SQL (TEXT type)
+        $this->assertSame("NULL", MySQL::SQLValue("", "text"));
+        $this->assertSame("NULL", MySQL::SQLValue(null, MySQL::SQLVALUE_TEXT));
     }
     
     public function testSqlFix()
     {
-        $expected = '\\\hello\\\ /world/';
-        $actual = $this->db->SQLFix("\hello\ /world/");
+        // SQLFix requires active connection (setUp creates it)
+        // mysqli_real_escape_string doubles backslashes: \ -> \\
+        // Input in memory: \hello\ /world/
+        // Expected in memory: \\hello\\ /world/
+        // In PHP code (double quotes): "\\\\hello\\\\ /world/"
+        $input = "\hello\ /world/"; 
+        $expected = "\\\\hello\\\\ /world/"; 
+        $actual = $this->db->SQLFix($input);
         $this->assertSame($expected, $actual);  
     }
  

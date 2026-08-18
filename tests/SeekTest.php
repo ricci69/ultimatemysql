@@ -17,7 +17,14 @@ final class SeekTest extends TestCase
         $expected = array("0"=>"2", "1"=>"John2", "2"=>"2022-06-01", "3"=>"Yellow");
 
         $this->db->Query("SELECT * FROM `test_table`");
-        $actual = $this->db->Seek(1);
+        
+        // BUG-015 FIX: Seek() now returns bool (positioning), not the row.
+        // We verify positioning succeeded.
+        $this->assertTrue($this->db->Seek(1));
+        
+        // Row is read with RowArray() AFTER Seek.
+        // Test expects only numeric keys (MYSQLI_NUM), as defined in $expected
+        $actual = $this->db->RowArray(null, MYSQLI_NUM);
 
         $this->assertEqualsCanonicalizing($expected, $actual);
     }
