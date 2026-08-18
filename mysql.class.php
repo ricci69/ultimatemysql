@@ -59,39 +59,39 @@ final class MySQL
     /**
      * SQL Value Type: Text, Varchar, Char, etc. (escaped string)
      */
-    public const string SQLVALUE_TEXT      = 'text';
+    public const SQLVALUE_TEXT      = 'text';
     /**
      * SQL Value Type: Integer, Int, BigInt, etc. (raw number)
      */
-    public const string SQLVALUE_NUMBER    = 'integer';
+    public const SQLVALUE_NUMBER    = 'integer';
     /**
      * SQL Value Type: Date (YYYY-MM-DD)
      */
-    public const string SQLVALUE_DATE      = 'date';
+    public const SQLVALUE_DATE      = 'date';
     /**
      * SQL Value Type: Datetime (YYYY-MM-DD HH:MM:SS)
      */
-    public const string SQLVALUE_DATETIME  = 'datetime';
+    public const SQLVALUE_DATETIME  = 'datetime';
     /**
      * SQL Value Type: Time (HH:MM:SS)
      */
-    public const string SQLVALUE_TIME      = 'time';
+    public const SQLVALUE_TIME      = 'time';
     /**
      * SQL Value Type: Boolean (1 or 0)
      */
-    public const string SQLVALUE_BOOLEAN   = 'boolean';
+    public const SQLVALUE_BOOLEAN   = 'boolean';
     /**
      * SQL Value Type: Boolean ('Y' or 'N')
      */
-    public const string SQLVALUE_YN        = 'y-n';
+    public const SQLVALUE_YN        = 'y-n';
     /**
      * SQL Value Type: Boolean ('T' or 'F')
      */
-    public const string SQLVALUE_TF        = 't-f';
+    public const SQLVALUE_TF        = 't-f';
     /**
      * SQL Value Type: Bit (1 or 0)
      */
-    public const string SQLVALUE_BIT       = 'bit';
+    public const SQLVALUE_BIT       = 'bit';
 
     private bool $autoEscapeValues = false;
     private static bool $globalAutoEscapeValues = false;
@@ -288,27 +288,36 @@ final class MySQL
         $this->autoReconnect = $flag;
     }
 
-    /**
-     * Ensures a valid database connection, reconnecting if necessary and allowed.
-     *
-     * @return bool True if connected, false otherwise.
-     */
-    private function ensureConnected(): bool
-    {
-        if ($this->IsConnected()) {
-            if (@mysqli_ping($this->mysql_link)) {
-                return true;
-            }
-            $this->mysql_link = null;
-        }
-
-        if (!$this->in_transaction && $this->autoReconnect) {
-            return $this->Open();
-        }
-
-        $this->SetError("Connection lost and auto-reconnect is disabled", -1);
-        return false;
-    }
+     /**                                                                                                                                                                                                                                    
+      * Ensures a valid database connection, reconnecting if necessary and allowed.                                                                                                                                                         
+      *                                                                                                                                                                                                                                     
+      * @return bool True if connected, false otherwise.                                                                                                                                                                                    
+      */                                                                                                                                                                                                                                    
+     private function ensureConnected(): bool                                                                                                                                                                                               
+     {                                                                                                                                                                                                                                      
+         if ($this->IsConnected()) {                                                                                                                                                                                                        
+             // FIX PHP 8.4+: mysqli_ping() is deprecated.                                                                                                                                                                                  
+             // Use a lightweight query to check connection liveness.                                                                                                                                                                       
+             try {                                                                                                                                                                                                                          
+                 // @ suppresses warning if connection is already dead/gone away                                                                                                                                                            
+                 $result = @mysqli_query($this->mysql_link, 'SELECT 1');                                                                                                                                                                    
+                 if ($result !== false) {                                                                                                                                                                                                   
+                     @mysqli_free_result($result);                                                                                                                                                                                          
+                     return true;                                                                                                                                                                                                           
+                 }                                                                                                                                                                                                                          
+             } catch (\Throwable) {                                                                                                                                                                                                         
+                 // Connection error, will trigger reconnect logic below                                                                                                                                                                    
+             }                                                                                                                                                                                                                              
+             $this->mysql_link = null;                                                                                                                                                                                                      
+         }                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                            
+         if (!$this->in_transaction && $this->autoReconnect) {                                                                                                                                                                              
+             return $this->Open();                                                                                                                                                                                                          
+         }                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                            
+         $this->SetError("Connection lost and auto-reconnect is disabled", -1);                                                                                                                                                             
+         return false;                                                                                                                                                                                                                      
+     }  
 
     /**
      * Sets the debug log file path.
