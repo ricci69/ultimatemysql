@@ -10,7 +10,7 @@ jobs:
     strategy:
        matrix:                                                                                                                                                                                                                              
          # v5.0 Supporta SOLO PHP 8.1+                                                                                                                                                                                                      
-         php-version: [ '8.1', '8.2', '8.3', '8.4' ]                                                                                                                                                                                        
+         php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]                                                                                                                                                                                        
          mysql-version: [ '8.0', '8.4' ] # Testiamo su MySQL 8.0 (LTS) e 8.4 (Latest)                                                                                                                                                       
          include:                                                                                                                                                                                                                           
            # Code Coverage SOLO su una combinazione (più veloce: PHP 8.3 + MySQL 8.0)                                                                                                                                                       
@@ -60,7 +60,7 @@ jobs:
         fail-fast: false
         matrix:
             php-version:
-                - '7.4'
+                - '8.5'
 
     services:
       mysql:
