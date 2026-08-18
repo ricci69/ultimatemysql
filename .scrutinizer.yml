@@ -1,5 +1,5 @@
 build:
-    image: default-bionic
+    image: default-jammy
     environment:
         php: 8.3
 
