@@ -1,27 +1,29 @@
-{
-    "name": "ricci69/ultimatemysql",
-    "type": "library",
-    "description": "MySQL database access wrapper compatible with PHP 8.1+",
-    "keywords": ["mysql","php","database"],
-    "homepage": "https://github.com/ricci69/ultimatemysql",
-    "license": "MIT",
-    "version": "5.0",
-    "minimum-stability": "stable",
-    "require": {
-        "php": ">=8.1",
-        "symfony/console": "^6.4"
-    },    
-    "autoload": {
-        "classmap": [
-            "src/"
-        ]
-    },
-    "require-dev": {
-        "phpunit/phpunit": "9.5.*",
-        "squizlabs/php_codesniffer": "^3.5",
-        "escapestudios/symfony2-coding-standard": "^3.9",
-        "vimeo/psalm": "^3.11|^4.0",
-        "doctrine/instantiator": "1.5.0",
-        "phpstan/phpstan": "^2.2"
-    }
-}
+                                                                                                                                                                                                                                            
+ {                                                                                                                                                                                                                                          
+     "name": "ricci69/ultimatemysql",                                                                                                                                                                                                       
+     "type": "library",                                                                                                                                                                                                                     
+     "description": "Ultimate MySQL Wrapper Class for PHP 8.1+",                                                                                                                                                                            
+     "keywords": ["mysql", "database", "wrapper", "mysqli", "prepared-statements"],                                                                                                                                                         
+     "homepage": "https://github.com/ricci69/ultimatemysql",                                                                                                                                                                                
+     "license": "MIT",                                                                                                                                                                                                                      
+     "require": {                                                                                                                                                                                                                           
+         "php": ">=8.1",                                                                                                                                                                                                                    
+         "ext-mysqli": "*"                                                                                                                                                                                                                  
+     },                                                                                                                                                                                                                                     
+     "autoload": {                                                                                                                                                                                                                          
+         "files": ["mysql.class.php"]                                                                                                                                                                                                       
+     },                                                                                                                                                                                                                                     
+     "require-dev": {                                                                                                                                                                                                                       
+         "phpunit/phpunit": "^10.0",                                                                                                                                                                                                        
+         "squizlabs/php_codesniffer": "^3.5",                                                                                                                                                                                               
+         "escapestudios/symfony2-coding-standard": "^3.9",                                                                                                                                                                                  
+         "vimeo/psalm": "^5.0",                                                                                                                                                                                                             
+         "phpstan/phpstan": "^1.10"                                                                                                                                                                                                         
+     },                                                                                                                                                                                                                                     
+     "config": {                                                                                                                                                                                                                            
+         "allow-plugins": {                                                                                                                                                                                                                 
+             "dealerdirect/phpcodesniffer-composer-installer": true                                                                                                                                                                         
+         },                                                                                                                                                                                                                                 
+         "sort-packages": true                                                                                                                                                                                                              
+     }                                                                                                                                                                                                                                      
+ } 
