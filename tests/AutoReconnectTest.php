@@ -26,7 +26,6 @@ final class AutoReconnectTest extends TestCase
         // Force dead link via reflection
         $ref = new ReflectionClass($this->db);
         $prop = $ref->getProperty('mysql_link');
-        $prop->setAccessible(true);
         $prop->setValue($this->db, null); // Simulate lost connection
 
         $result = $this->db->Query("SELECT 1");
@@ -43,7 +42,6 @@ final class AutoReconnectTest extends TestCase
         $this->db->Close();
         $ref = new ReflectionClass($this->db);
         $prop = $ref->getProperty('mysql_link');
-        $prop->setAccessible(true);
         $prop->setValue($this->db, null);
 
         // Next query must reopen connection
@@ -62,7 +60,6 @@ final class AutoReconnectTest extends TestCase
         // Force dead link
         $ref = new ReflectionClass($this->db);
         $prop = $ref->getProperty('mysql_link');
-        $prop->setAccessible(true);
         $this->db->Close();
         $prop->setValue($this->db, null);
 
@@ -70,7 +67,7 @@ final class AutoReconnectTest extends TestCase
         $result = $this->db->Query("SELECT 1");
         $this->assertFalse($result);
         $this->assertStringContainsString("auto-reconnect disabled", $this->db->Error());
-        
+
         // Clean rollback for tearDown
         $this->db->TransactionRollback();
     }
@@ -80,7 +77,6 @@ final class AutoReconnectTest extends TestCase
     {
         $ref = new ReflectionClass($this->db);
         $method = $ref->getMethod('ensureConnected');
-        $method->setAccessible(true);
 
         $this->db->SetAutoReconnect(true);
         $this->db->TransactionBegin();

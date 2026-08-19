@@ -1,3 +1,5 @@
 /vendor
 composer.lock
 /nbproject/private/
+.phpunit.result.cache
+coverage.xml

@@ -507,12 +507,13 @@ final class MySQL
     {
         if ($tableName === '') throw new InvalidArgumentException("Table name cannot be empty");
         if ($valuesArray === []) throw new InvalidArgumentException("Values array cannot be empty");
-        $safeColumns = array_map(array('self', 'EscapeIdentifier'), array_keys($valuesArray));
+        $safeColumns = array_map([self::class, 'EscapeIdentifier'], array_keys($valuesArray));
         $columns = implode(", ", $safeColumns);
 
         if ($autoEscape) {
+            $self = self::class;
             $valuesArray = array_map(
-                function($v) { return self::SQLValue($v, self::detectSqlValueType($v)); },
+                function($v) use ($self) { return $self::SQLValue($v, $self::detectSqlValueType($v)); },
                 $valuesArray
             );
         }
@@ -643,7 +644,8 @@ final class MySQL
                 $where .= $safeColumn . ($operator === "=" ? " IS NULL" : ($operator === "!=" || $operator === "<>" ? " IS NOT NULL" : " $operator NULL"));
             } elseif (in_array($operator, array('IN', 'NOT IN'), true) && is_array($value)) {
                 if ($autoEscape) {
-                    $vals = array_map(function($v) { return self::SQLValue($v, self::detectSqlValueType($v)); }, $value);
+                    $self = self::class;
+                    $vals = array_map(function($v) use ($self) { return $self::SQLValue($v, $self::detectSqlValueType($v)); }, $value);
                 } else {
                     $vals = $value;
                 }

@@ -22,7 +22,6 @@ final class ConnectionResilienceTest extends TestCase
     {
         $ref = new ReflectionClass($this->db);
         $prop = $ref->getProperty('autoReconnect');
-        $prop->setAccessible(true);
         $this->assertFalse($prop->getValue($this->db));
     }
 
@@ -31,7 +30,6 @@ final class ConnectionResilienceTest extends TestCase
         $this->db->SetAutoReconnect(true);
         $ref = new ReflectionClass($this->db);
         $prop = $ref->getProperty('autoReconnect');
-        $prop->setAccessible(true);
         $this->assertTrue($prop->getValue($this->db));
     }
 
@@ -39,7 +37,6 @@ final class ConnectionResilienceTest extends TestCase
     {
         $ref = new ReflectionClass($this->db);
         $method = $ref->getMethod('ensureConnected');
-        $method->setAccessible(true);
         $this->assertTrue($method->invoke($this->db));
     }
 
@@ -47,12 +44,11 @@ final class ConnectionResilienceTest extends TestCase
     {
         $this->db->Close(); // Force disconnect
         $this->db->SetAutoReconnect(false);
-        
+
         $ref = new ReflectionClass($this->db);
         $method = $ref->getMethod('ensureConnected');
-        $method->setAccessible(true);
         $result = $method->invoke($this->db);
-        
+
         $this->assertFalse($result);
         $this->assertStringContainsString("Connection lost", $this->db->Error());
     }
@@ -70,13 +66,13 @@ final class ConnectionResilienceTest extends TestCase
     {
         $this->assertTrue($this->db->Prepare("SELECT * FROM `test_table`"));
         $this->assertTrue($this->db->Execute());
-        
+
         // MoveFirst on mysqli_stmt (fallback without mysqlnd) must fail.
         // On mysqlnd (get_result) returns buffered mysqli_result -> MoveFirst WORKS.
         // We test that the method doesn't throw exception and returns bool.
         $result = $this->db->MoveFirst();
         $this->assertIsBool($result);
-        
+
         // If it fails, verify specific error message
         if (!$result) {
             $this->assertStringContainsString("not supported on unbuffered prepared statement", $this->db->Error());
